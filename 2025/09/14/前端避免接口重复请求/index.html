@@ -1,0 +1,177 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>前端避免接口重复请求 | ggbond个人博客</title><meta name="author" content="ggbond11"><meta name="copyright" content="ggbond11"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前端避免接口重复请求 日常开发中，经常会遇到点击一个按钮或者进行搜索时，请求接口的需求。 如果我们不做优化，连续点击按钮或者进行搜索，接口会重复请求。 首先，这会导致性能浪费！最重要的，如果接口响应比较慢，此时，我们在做其他操作会有一系列bug！ 1.防抖节流1.1防抖示例12345678910111213141516function debounce(func, delay) &#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端避免接口重复请求">
+<meta property="og:url" content="https://ggbond11.github.io/2025/09/14/%E5%89%8D%E7%AB%AF%E9%81%BF%E5%85%8D%E6%8E%A5%E5%8F%A3%E9%87%8D%E5%A4%8D%E8%AF%B7%E6%B1%82/index.html">
+<meta property="og:site_name" content="ggbond个人博客">
+<meta property="og:description" content="前端避免接口重复请求 日常开发中，经常会遇到点击一个按钮或者进行搜索时，请求接口的需求。 如果我们不做优化，连续点击按钮或者进行搜索，接口会重复请求。 首先，这会导致性能浪费！最重要的，如果接口响应比较慢，此时，我们在做其他操作会有一系列bug！ 1.防抖节流1.1防抖示例12345678910111213141516function debounce(func, delay) &#123;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ggbond11.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-09-14T13:06:04.000Z">
+<meta property="article:modified_time" content="2025-09-14T13:07:04.022Z">
+<meta property="article:author" content="ggbond11">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ggbond11.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "前端避免接口重复请求",
+  "url": "https://ggbond11.github.io/2025/09/14/%E5%89%8D%E7%AB%AF%E9%81%BF%E5%85%8D%E6%8E%A5%E5%8F%A3%E9%87%8D%E5%A4%8D%E8%AF%B7%E6%B1%82/",
+  "image": "https://ggbond11.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-09-14T13:06:04.000Z",
+  "dateModified": "2025-09-14T13:07:04.022Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "ggbond11",
+      "url": "https://ggbond11.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://ggbond11.github.io/2025/09/14/%E5%89%8D%E7%AB%AF%E9%81%BF%E5%85%8D%E6%8E%A5%E5%8F%A3%E9%87%8D%E5%A4%8D%E8%AF%B7%E6%B1%82/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '前端避免接口重复请求',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">ggbond个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">前端避免接口重复请求</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">前端避免接口重复请求</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-09-14T13:06:04.000Z" title="发表于 2025-09-14 21:06:04">2025-09-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-09-14T13:07:04.022Z" title="更新于 2025-09-14 21:07:04">2025-09-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF%E5%B0%8F%E7%9F%A5%E8%AF%86/">前端小知识</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>前端避免接口重复请求</p>
+<p>日常开发中，经常会遇到点击一个<strong>按钮</strong>或者进行<strong>搜索</strong>时，请求接口的需求。</p>
+<p>如果我们不做优化，连续点击<strong>按钮</strong>或者进行<strong>搜索</strong>，接口会重复请求。</p>
+<p>首先，这会导致性能浪费！最重要的，如果接口响应比较慢，此时，我们在做其他操作会有一系列bug！</p>
+<h1 id="1-防抖节流"><a href="#1-防抖节流" class="headerlink" title="1.防抖节流"></a>1.防抖节流</h1><h2 id="1-1防抖示例"><a href="#1-1防抖示例" class="headerlink" title="1.1防抖示例"></a>1.1防抖示例</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">function debounce(func, delay) &#123;</span><br><span class="line">    let timeout;</span><br><span class="line">    return function(...args) &#123;</span><br><span class="line">        clearTimeout(timeout);</span><br><span class="line">        timeout = setTimeout(() =&gt; func.apply(this, args), delay);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function fetchData() &#123;</span><br><span class="line">  axios.get(&#x27;http://api/gcshi)  // 使用示例API</span><br><span class="line">    .then(response =&gt; &#123;</span><br><span class="line">      console.log(response.data);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const debouncedFetchData = debounce(fetchData, 300);</span><br></pre></td></tr></table></figure>
+<h2 id="1-2节流示例"><a href="#1-2节流示例" class="headerlink" title="1.2节流示例"></a>1.2节流示例</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function throttle(fn, delay) &#123;</span><br><span class="line">  let lastCall;</span><br><span class="line">  return function(...args) &#123;</span><br><span class="line">    const now = new Date().getTime();</span><br><span class="line">    if (now - lastCall.value &lt; delay) return;</span><br><span class="line">    lastCall.value = now;</span><br><span class="line">    fn(...args);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function fetchData() &#123;</span><br><span class="line">  axios.get(&#x27;http://api/gcshi&#x27;)  //</span><br><span class="line">    .then(response =&gt; &#123;</span><br><span class="line">      console.log(response.data);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const throttledFetchData = throttle(fetchData, 1000);</span><br></pre></td></tr></table></figure>
+<h1 id="2-请求锁定（使用loading状态）"><a href="#2-请求锁定（使用loading状态）" class="headerlink" title="2.请求锁定（使用loading状态）"></a>2.请求锁定（使用loading状态）</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">let isLoading = false;</span><br><span class="line"></span><br><span class="line">async function fetchData(url) &#123;</span><br><span class="line">    if (isLoading) &#123;</span><br><span class="line">        console.log(&quot;请求正在进行中，请稍候...&quot;);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    isLoading = true;</span><br><span class="line">    try &#123;</span><br><span class="line">        const response = await fetch(url);</span><br><span class="line">        const data = await response.json();</span><br><span class="line">        console.log(data);</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        isLoading = false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 使用示例</span><br><span class="line">fetchData(&#x27;/api/data&#x27;);</span><br></pre></td></tr></table></figure>
+<p>这种方式简单粗暴，十分好用！</p>
+<p><strong>但是也有弊端，比如我搜索A后，接口请求中；但我此时突然想搜B，就不会生效了，因为请求A还没响应</strong>！</p>
+<p>因此，请求锁定这种方式无法取消原先的请求，只能等待一个请求执行完才能继续请求。</p>
+<h1 id="3-请求去重机制"><a href="#3-请求去重机制" class="headerlink" title="3.请求去重机制"></a>3.请求去重机制</h1><p>使用标识符检查请求是否已存在。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">const pendingRequests = new Set();</span><br><span class="line"></span><br><span class="line">async function fetchData(url) &#123;</span><br><span class="line">    if (pendingRequests.has(url)) &#123;</span><br><span class="line">        console.log(&quot;请求已存在，避免重复请求&quot;);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    pendingRequests.add(url);</span><br><span class="line">    try &#123;</span><br><span class="line">        const response = await fetch(url);</span><br><span class="line">        const data = await response.json();</span><br><span class="line">        console.log(data);</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        pendingRequests.delete(url);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 使用示例</span><br><span class="line">fetchData(&#x27;/api/data&#x27;);</span><br><span class="line">fetchData(&#x27;/api/data&#x27;); // 这次请求会被避免</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="4-axios-CancelToken取消重复请求"><a href="#4-axios-CancelToken取消重复请求" class="headerlink" title="4.axios.CancelToken取消重复请求"></a>4.axios.CancelToken取消重复请求</h1><p>axios其实内置了一个取消重复请求的方法：<code>axios.CancelToken</code>，我们可以利用axios.CancelToken来取消重复的请求，爆好用！</p>
+<p>首先，我们要知道，aixos有一个<code>config</code>的配置项，取消请求就是在这里面配置的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;button @click=&quot;fetchData&quot;&gt;请求&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref &#125; from &#x27;vue&#x27;;</span><br><span class="line">import axios from &#x27;axios&#x27;;</span><br><span class="line"></span><br><span class="line">let cancelTokenSource = null;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function fetchData() &#123;</span><br><span class="line">  if (cancelTokenSource) &#123;</span><br><span class="line">    cancelTokenSource.cancel(&#x27;取消上次请求&#x27;);</span><br><span class="line">    cancelTokenSource = null;</span><br><span class="line">  &#125;</span><br><span class="line">  cancelTokenSource = axios.CancelToken.source();</span><br><span class="line">  </span><br><span class="line">  axios.get(&#x27;http://api/gcshi&#x27;,&#123;cancelToken: cancelTokenSource.token&#125;)  //</span><br><span class="line">    .then(response =&gt; &#123;</span><br><span class="line">      </span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7380185173689204746">https://juejin.cn/post/7380185173689204746</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://ggbond11.github.io">ggbond11</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://ggbond11.github.io/2025/09/14/%E5%89%8D%E7%AB%AF%E9%81%BF%E5%85%8D%E6%8E%A5%E5%8F%A3%E9%87%8D%E5%A4%8D%E8%AF%B7%E6%B1%82/">https://ggbond11.github.io/2025/09/14/%E5%89%8D%E7%AB%AF%E9%81%BF%E5%85%8D%E6%8E%A5%E5%8F%A3%E9%87%8D%E5%A4%8D%E8%AF%B7%E6%B1%82/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://ggbond11.github.io" target="_blank">ggbond个人博客</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/09/14/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8C%87%E7%BA%B9/" title="浏览器指纹"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">浏览器指纹</div></div><div class="info-2"><div class="info-item-1">浏览器指纹-前端如何识别用户设备 1.什么是浏览器指纹浏览器指纹，是用来唯一标识你浏览器的一组“特征值”。它不是我们理解中的那种真实指纹，而是通过收集浏览器、操作系统、设备分辨率、字体、插件等信息，组合成的一个独特 ID。 和传统的 Cookie 不同，浏览器指纹不需要在用户设备上存储任何东西，完全是“读取现有信息”来识别用户。 2.常见的浏览器指纹方案 Navigator 指纹：浏览器类型、版本、系统平台等信息。 Canvas 指纹：让浏览器绘制一段隐藏的图像，然后读取图像的像素差异，不同设备会有微小区别。 WebGL 指纹：利用显卡和图形驱动渲染差异，获取设备的唯一特征。 字体、插件、时区、屏幕分辨率等：这些信息组合起来也能提供一定的识别度。  当然，单一方案识别率可能不高，但多种信息结合后，指纹的唯一性就会明显提升。 3.Navigator指纹Navigator 是前端获取浏览器和部分设备环境信息的重要接口。 下面是一些常用的属性和方法（跨浏览器兼容性较好的为主）：    属性&#x2F;方法 作用说明 示例代码    navigator.userAgent 获取浏览器的用...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">ggbond11</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ggbond11"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%98%B2%E6%8A%96%E8%8A%82%E6%B5%81"><span class="toc-number">1.</span> <span class="toc-text">1.防抖节流</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1%E9%98%B2%E6%8A%96%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1.1防抖示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2%E8%8A%82%E6%B5%81%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.2.</span> <span class="toc-text">1.2节流示例</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E8%AF%B7%E6%B1%82%E9%94%81%E5%AE%9A%EF%BC%88%E4%BD%BF%E7%94%A8loading%E7%8A%B6%E6%80%81%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">2.请求锁定（使用loading状态）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E8%AF%B7%E6%B1%82%E5%8E%BB%E9%87%8D%E6%9C%BA%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text">3.请求去重机制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-axios-CancelToken%E5%8F%96%E6%B6%88%E9%87%8D%E5%A4%8D%E8%AF%B7%E6%B1%82"><span class="toc-number">4.</span> <span class="toc-text">4.axios.CancelToken取消重复请求</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E5%89%8D%E7%AB%AF%E9%81%BF%E5%85%8D%E6%8E%A5%E5%8F%A3%E9%87%8D%E5%A4%8D%E8%AF%B7%E6%B1%82/" title="前端避免接口重复请求">前端避免接口重复请求</a><time datetime="2025-09-14T13:06:04.000Z" title="发表于 2025-09-14 21:06:04">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8C%87%E7%BA%B9/" title="浏览器指纹">浏览器指纹</a><time datetime="2025-09-14T13:04:12.000Z" title="发表于 2025-09-14 21:04:12">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/image/" title="image">image</a><time datetime="2025-09-14T07:21:12.000Z" title="发表于 2025-09-14 15:21:12">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/test/" title="test">test</a><time datetime="2025-09-14T03:21:00.000Z" title="发表于 2025-09-14 11:21:00">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/13/hello-world/" title="Hello World">Hello World</a><time datetime="2025-09-13T11:44:08.249Z" title="发表于 2025-09-13 19:44:08">2025-09-13</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By ggbond11</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
