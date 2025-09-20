@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ggbond11.github.io/images/ggbond.jpg">
 <meta property="article:published_time" content="2025-09-15T08:55:31.000Z">
-<meta property="article:modified_time" content="2025-09-15T08:58:54.059Z">
+<meta property="article:modified_time" content="2025-09-20T12:11:40.769Z">
 <meta property="article:author" content="ggbond11">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://ggbond11.github.io/images/ggbond.jpg"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "https://ggbond11.github.io/2025/09/15/CSS%E6%A8%A1%E5%9D%97%E5%8C%96/",
   "image": "https://ggbond11.github.io/images/ggbond.jpg",
   "datePublished": "2025-09-15T08:55:31.000Z",
-  "dateModified": "2025-09-15T08:58:54.059Z",
+  "dateModified": "2025-09-20T12:11:40.769Z",
   "author": [
     {
       "@type": "Person",
@@ -158,7 +158,7 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">ggbond个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">CSS模块化</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">CSS模块化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-09-15T08:55:31.000Z" title="发表于 2025-09-15 16:55:31">2025-09-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-09-15T08:58:54.059Z" title="更新于 2025-09-15 16:58:54">2025-09-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF%E5%B0%8F%E7%9F%A5%E8%AF%86/">前端小知识</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>CSS模块化</p>
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">ggbond个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">CSS模块化</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">CSS模块化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-09-15T08:55:31.000Z" title="发表于 2025-09-15 16:55:31">2025-09-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-09-20T12:11:40.769Z" title="更新于 2025-09-20 20:11:40">2025-09-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF%E5%B0%8F%E7%9F%A5%E8%AF%86/">前端小知识</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>CSS模块化</p>
 <h1 id="1-为什么CSS也需要模块化？"><a href="#1-为什么CSS也需要模块化？" class="headerlink" title="1.为什么CSS也需要模块化？"></a>1.为什么CSS也需要模块化？</h1><p>其实平常我们使用 Vue、React这类框架时，就已经使用到了CSS模块化。回顾一下历史，从我们手写原生CSS，到后面使用Sass&#x2F;Less等预处理器，再到使用 PostCSS 等后处理器，或者是使用CSS Module以及CSS in JS，都是对标某些问题而产生的比较具有针对性的方案。</p>
 <p>而CSS模块化所针对的问题追溯源头其实都很简单：</p>
 <ul>
@@ -272,7 +272,7 @@
 <p>CSS 也在不断发展，随着各种新的标准引入，被浏览器大幅度支持后，我觉得将来甚至连 Scss&#x2F;Less 都不需要，完全可以使用原生 CSS 配合 CSS 处理工具以及相关规范约束搞定开发，搞太多无用的东西反而徒增烦恼，这是其三。</p>
 <h1 id="3-最后"><a href="#3-最后" class="headerlink" title="3.最后"></a>3.最后</h1><p>其实，BEM、OOCSS、AMCSS、ACSS这些对我们来说只是约束，早期我们就凭借这些约束来使开发更方便，而 CSS Modules 和 CSS in JS 则是正经的模块化解决方案。CSS in JS 是彻底抛弃 CSS，使用 JS 来写样式，这种方式比较激进一些，不能利用现有的 CSS 技术，处理起来伪类等问题相对困难。CSS Modules 仍然使用 CSS，只是让 JS 来管理依赖，能够最大化地结合 CSS 生态和 JS 模块化能力，在我来看是最优的解决方案了。</p>
 <p>由于 CSS Modules 以及 CSS in JS 这两种方案伴随着 Vue 及 React 生态而快速发展，很多人小团队开发起来，用一些工具加上一些库诸如 Scss&#x2F;Less 或者 Styled-components 开发感觉挺好，能解决大多开发问题就完事了，所以就不太在意 BEM、OOCSS、AMCSS、ACSS 这些约束了，久而久之造成的后果就是团队 CSS 写的一塌糊涂，命名也千奇百怪。即使是组件内写不了太多的 CSS ，长此以往下来也会积累很多各式各样的样式问题。So，我想说的是，如果你的团队 CSS 问题如上，那就赶紧行动起来把，在现代的 CSS 模块化方案之上再使用一些像 BEM、ACSS 等约束来把 CSS 规范起来，简单省事，利大于弊。</p>
-<p>参考文档：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7012774158371127326">https://juejin.cn/post/7012774158371127326</a></p>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7012774158371127326">「前端工程四部曲」模块化的前世今生（下）</a></p>
 <p>参考视频：</p>
 <p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1dA41197L6/?spm_id_from=333.337.search-card.all.click?t=mention&mt=doc&dt=sdk">49-css模块化_哔哩哔哩_bilibili</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1eGMVzcEbg/?spm_id_from=333.337.search-card.all.click&vd_source=110b2a8a34c29a5ce29d94eaad8904e0?t=mention&mt=doc&dt=sdk">css模块化漫漫谈 CSS Modules_哔哩哔哩_bilibili</a></p>
